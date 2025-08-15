@@ -1,0 +1,65 @@
+# Configuration for probot-apps that can be enabled
+# https://probot.github.io/apps/
+
+# Configuration for welcome - https://github.com/behaviorbot/welcome
+welcome:
+  - type: new_contributors
+    message: |
+      Olá @${{ github.event.sender.login }}, bem-vindo ao **Traffic Manager Hub**! 🎉
+
+      Obrigado por sua primeira contribuição! Para começar:
+
+      - 📖 Leia nosso [Guia de Contribuição](https://github.com/seu-usuario/traffic-manager-hub/blob/main/.github/CONTRIBUTING.md)
+      - 🐛 Reporte bugs usando o [template de bug](https://github.com/seu-usuario/traffic-manager-hub/issues/new?template=bug_report.md)
+      - 💡 Sugira features usando o [template de feature](https://github.com/seu-usuario/traffic-manager-hub/issues/new?template=feature_request.md)
+
+      Se precisar de ajuda, não hesite em perguntar! 🤝
+
+# Configuration for stale - https://github.com/behaviorbot/stale
+stale:
+  # Number of days of inactivity before an issue becomes stale
+  daysUntilStale: 60
+  # Number of days of inactivity before a stale issue is closed
+  daysUntilClose: 7
+  # Issues with these labels will never be considered stale
+  exemptLabels:
+    - pinned
+    - security
+    - [bug]
+    - [enhancement]
+    - [documentation]
+    - [help wanted]
+    - [good first issue]
+  # Label to use when marking an issue as stale
+  staleLabel: "no-issue-activity"
+  # Comment to post when marking an issue as stale. Set to `false` to disable
+  markComment: >
+    Este issue foi marcado como inativo porque não houve atividade recente.
+    Será fechado em 7 dias se não houver nova atividade.
+    Se você ainda está trabalhando nisso, por favor comente para manter o issue ativo.
+  # Comment to post when closing a stale issue. Set to `false` to disable
+  closeComment: >
+    Este issue foi fechado por inatividade.
+    Se você ainda precisa de ajuda, sinta-se à vontade para reabrir ou criar um novo issue.
+
+# Configuration for delete-merged-branch - https://github.com/behaviorbot/delete-merged-branch
+deleteMergedBranch:
+  # Branches to exclude from deletion
+  exclude:
+    - main
+    - develop
+    - master
+
+# Configuration for request-info - https://github.com/behaviorbot/request-info
+requestInfo:
+  # Comment to post when requesting more information from the issue author
+  requestInfoComment: >
+    Obrigado por abrir este issue! Para ajudarmos melhor, precisamos de algumas informações adicionais:
+
+    - **Descrição detalhada** do problema ou feature
+    - **Passos para reproduzir** (se aplicável)
+    - **Comportamento esperado** vs **comportamento atual**
+    - **Screenshots** (se aplicável)
+    - **Ambiente**: OS, browser, versões
+
+    Por favor, atualize o issue com essas informações para que possamos ajudá-lo melhor! 🙏

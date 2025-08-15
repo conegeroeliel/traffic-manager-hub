@@ -1,0 +1,207 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  nome                  String
+  senha                 String
+  plano                 Plano     @default(FREE)
+  statusPagamento       StatusPagamento @default(ATIVO)
+  dataCadastro          DateTime  @default(now())
+  ultimoLogin           DateTime  @default(now())
+  dataExpiracaoTrial    DateTime?
+  dataExpiracaoPremium  DateTime?
+  limiteClientes        Int       @default(3)
+  limiteDiagnosticos    Int       @default(1)
+  limiteTarefas         Int       @default(10)
+  limiteReunioes        Int       @default(5)
+  totalClientes         Int       @default(0)
+  totalDiagnosticos     Int       @default(0)
+  totalTarefas          Int       @default(0)
+  totalReunioes         Int       @default(0)
+  empresa               String?
+  telefone              String?
+  cpf                   String?
+  rua                   String?
+  cidade                String?
+  estado                String?
+  cep                   String?
+
+  // Relacionamentos
+  clientes              Cliente[]
+  tarefas               Tarefa[]
+  reunioes              Reuniao[]
+  diagnosticos          Diagnostico[]
+  pagamentos            Payment[]
+
+  @@map("users")
+}
+
+model Cliente {
+  id          String   @id @default(cuid())
+  nome        String
+  email       String?
+  telefone    String?
+  empresa     String?
+  endereco    String?
+  observacoes String?
+  status      StatusCliente @default(ATIVO)
+  dataCadastro DateTime @default(now())
+  ultimaAtualizacao DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relacionamentos
+  tarefas     Tarefa[]
+  reunioes    Reuniao[]
+  diagnosticos Diagnostico[]
+
+  @@map("clientes")
+}
+
+model Tarefa {
+  id          String   @id @default(cuid())
+  titulo      String
+  descricao   String?
+  prioridade  Prioridade @default(MEDIA)
+  status      StatusTarefa @default(PENDENTE)
+  dataCriacao DateTime @default(now())
+  dataVencimento DateTime?
+  dataConclusao DateTime?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clienteId   String?
+  cliente     Cliente? @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+
+  @@map("tarefas")
+}
+
+model Reuniao {
+  id          String   @id @default(cuid())
+  titulo      String
+  descricao   String?
+  dataHora    DateTime
+  tipo        TipoReuniao @default(APRESENTACAO)
+  status      StatusReuniao @default(AGENDADA)
+  observacoes String?
+  dataCriacao DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clienteId   String?
+  cliente     Cliente? @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+
+  @@map("reunioes")
+}
+
+model Diagnostico {
+  id          String   @id @default(cuid())
+  titulo      String
+  descricao   String?
+  resultado   String
+  status      StatusDiagnostico @default(PENDENTE)
+  dataCriacao DateTime @default(now())
+  dataConclusao DateTime?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clienteId   String?
+  cliente     Cliente? @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+
+  @@map("diagnosticos")
+}
+
+model Payment {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plano             Plano
+  valor             Float
+  status            StatusPayment @default(PENDENTE)
+  metodoPagamento   MetodoPagamento
+  dataPagamento     DateTime?
+  dataExpiracao     DateTime
+  gatewayPagamento  String?
+  codigoTransacao   String?
+  dataCriacao       DateTime @default(now())
+
+  @@map("payments")
+}
+
+// Enums
+enum Plano {
+  FREE
+  TRIAL
+  PREMIUM
+}
+
+enum StatusPagamento {
+  ATIVO
+  PENDENTE
+  CANCELADO
+  EXPIRADO
+}
+
+enum StatusCliente {
+  ATIVO
+  INATIVO
+  PROSPECTO
+}
+
+enum Prioridade {
+  BAIXA
+  MEDIA
+  ALTA
+  URGENTE
+}
+
+enum StatusTarefa {
+  PENDENTE
+  EM_ANDAMENTO
+  CONCLUIDA
+  CANCELADA
+}
+
+enum TipoReuniao {
+  APRESENTACAO
+  FOLLOW_UP
+  ESTRATEGIA
+  REVISAO
+}
+
+enum StatusReuniao {
+  AGENDADA
+  CONFIRMADA
+  REALIZADA
+  CANCELADA
+}
+
+enum StatusDiagnostico {
+  PENDENTE
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum StatusPayment {
+  PENDENTE
+  APROVADO
+  CANCELADO
+  REEMBOLSADO
+}
+
+enum MetodoPagamento {
+  PIX
+  CARTAO
+  BOLETO
+}
+
+

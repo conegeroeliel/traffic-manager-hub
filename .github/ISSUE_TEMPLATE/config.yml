@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentação
+    url: https://github.com/seu-usuario/traffic-manager-hub#readme
+    about: Leia a documentação do projeto antes de abrir um issue
+  - name: 🤝 Guia de Contribuição
+    url: https://github.com/seu-usuario/traffic-manager-hub/blob/main/.github/CONTRIBUTING.md
+    about: Saiba como contribuir com o projeto
+  - name: 🔒 Política de Segurança
+    url: https://github.com/seu-usuario/traffic-manager-hub/blob/main/.github/SECURITY.md
+    about: Reporte vulnerabilidades de segurança
+  - name: 💬 Discussions
+    url: https://github.com/seu-usuario/traffic-manager-hub/discussions
+    about: Faça perguntas e participe de discussões
